@@ -29,8 +29,6 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        request.setAttribute("mealToList", MealsUtil.getMealsTo());
-//        request.getRequestDispatcher("/meals.jsp").forward(request, response);
 
         String forward="";
         String action = request.getParameter("action");
@@ -79,17 +77,6 @@ public class MealServlet extends HttpServlet {
 
         Meal meal = new Meal(id,dateTime,description, calories);
         dao.save(meal);
-//
-//        if(userid == null || userid.isEmpty())
-//        {
-//            Meal meal = new Meal();
-//            dao.addUser(user);
-//        }
-//        else
-//        {
-//            user.setUserid(Integer.parseInt(userid));
-//            dao.updateUser(user);
-//        }
 
         RequestDispatcher view = request.getRequestDispatcher(LIST);
         request.setAttribute("mealToList", dao.getMealsTo());
