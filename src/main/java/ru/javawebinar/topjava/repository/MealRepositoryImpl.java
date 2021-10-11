@@ -71,16 +71,11 @@ public class MealRepositoryImpl implements MealRepository {
         return MealsUtil.getMealsTo(this.meals);
     }
 
-
     @Override
     public Meal findById(Integer id) {
-        Meal currentMeal = null;
-        for (Meal meal : this.meals) {
-            if (id == meal.getId()) {
-                currentMeal = meal;
-            }
-        }
-
-        return currentMeal;
+        return this.meals.stream()
+                .filter(m -> m.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 }
