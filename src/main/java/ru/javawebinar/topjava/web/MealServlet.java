@@ -1,11 +1,15 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import static org.slf4j.LoggerFactory.getLogger;
+import ru.javawebinar.topjava.util.MealsUtil;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
@@ -13,7 +17,8 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meals");
-        response.sendRedirect("meals.jsp");
+        request.setAttribute("mealToList", MealsUtil.getMeals());
+        request.getRequestDispatcher("/meals.jsp").forward(request, response);
 
     }
 }
