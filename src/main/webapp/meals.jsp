@@ -31,6 +31,8 @@
         <th>Date</th>
         <th>Description</th>
         <th>Calories</th>
+        <th></th>
+        <th></th>
     </tr>
 
     <c:forEach var="meal" items="${mealToList}">
@@ -39,8 +41,11 @@
             <td><c:out value="${MealsUtil.getFormattedDateTime(meal.dateTime)}"/></td>
             <td><c:out value="${meal.description}"/></td>
             <td><c:out value="${meal.calories}"/></td>
+            <td><a href="meals?action=edit&Id=<c:out value="${meal.id}"/>">Update</a></td>
+            <td><a href="meals?action=delete&Id=<c:out value="${meal.id}"/>">Delete</a></td>
         </tr>
     </c:forEach>
 </table>
+<p><a href="meals?action=insert">Add Meal</a></p>
 </body>
 </html>
