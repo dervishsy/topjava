@@ -1,23 +1,33 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="ru.javawebinar.topjava.util.MealsUtil" %>
+<%--@elvariable id="editaction" type=""--%>
+<c:set var="editActionName" scope="session" value="${editaction=='edit'?'Edit meal':'Add meal'}"/>
 <html>
 <head>
-    <title>Add new meal</title>
+    <link rel="stylesheet" href="mealedit.css" type="text/css">
+    <title>${editActionName}</title>
 </head>
-<body>
 
-<form method="POST" action='meals' name="frmAddMeal" accept-charset="UTF-8">
-    ID : <input type="hidden" readonly="readonly" name="Id"
-                     value="<c:out value="${meal.id}" />" /> <br />
-    dateTime : <input type="text" name="dateTime"
-                      value="<c:out  value="${MealsUtil.getFormattedDateTime(meal.dateTime)}" />"/> <br />
-    description : <input type="text" name="description"
-        value="<c:out value="${meal.description}" />" /> <br />
-    calories : <input  type="text" name="calories"
-        value="<c:out value="${meal.calories}" />" /> <br />
-    <input type="submit" value="Submit" />
-    <input type="button" name="cancel" value="Cancel" onclick="location.href='meals'">
-</form>
+<body>
+<h2>${editActionName}</h2>
+<div class="main">
+    <form method="POST" action='meals' name="frmAddMeal" accept-charset="UTF-8">
+        <input type="hidden" readonly="readonly" name="id" value="${meal.id}"/>
+        <label for="dateTime">DateTime:</label>
+        <input type="datetime-local" name="dateTime" value="${meal.dateTime}" id="dateTime"/>
+
+        <label for="description">Description:</label>
+        <input type="text" name="description" value="${meal.description}" id="description"/>
+
+        <label for="calories">Calories :</label>
+        <input type="number" name="calories" value="${meal.calories}" id="calories"/>
+
+        <div>
+            <input type="submit" value="Submit"/>
+            <input type="button" name="Cancel" value="Cancel" onclick="location.href='meals'">
+        </div>
+    </form>
+</div>
 </body>
 </html>

@@ -3,36 +3,17 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDateTime;
 
 public class MealTo {
-    private final int id;
+    private final Integer id;
+
     private final LocalDateTime dateTime;
+
     private final String description;
+
     private final int calories;
+
     private final boolean excess;
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getCalories() {
-        return calories;
-    }
-
-    public boolean isExcess() {
-        return excess;
-    }
-
-    public boolean getExcess() {
-        return excess;
-    }
-
-    public int getId() {return id;}
-
-
-    public MealTo(int id, LocalDateTime dateTime, String description, int calories, boolean excess) {
+    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
         this.id = id;
         this.dateTime = dateTime;
         this.description = description;
@@ -40,13 +21,27 @@ public class MealTo {
         this.excess = excess;
     }
 
-    @Override
+    public LocalDateTime getDateTime() {
+        return this.dateTime;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public int getCalories() {
+        return this.calories;
+    }
+
+    public boolean getExcess() {
+        return this.excess;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
     public String toString() {
-        return "MealTo{" +
-                "dateTime=" + dateTime +
-                ", description='" + description + '\'' +
-                ", calories=" + calories +
-                ", excess=" + excess +
-                '}';
+        return "MealTo{dateTime=" + this.dateTime + ", description='" + this.description + '\'' + ", calories=" + this.calories + ", excess=" + this.excess + '}';
     }
 }
