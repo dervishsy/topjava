@@ -1,0 +1,13 @@
+table, th, td {
+    border: 2px solid black;
+    border-collapse: collapse;
+    padding: 4px;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}

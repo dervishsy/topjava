@@ -1,25 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="ru.javawebinar.topjava.util.MealsUtil" %>
+<%@ page import="ru.javawebinar.topjava.util.TimeUtil" %>
+<jsp:useBean id="mealToList" scope="request" type="java.util.List<ru.javawebinar.topjava.model.MealTo>"/>
 <html lang="ru">
 <head>
     <title>Meals</title>
-    <style>
-        table, th, td {
-            border: 2px solid black;
-            border-collapse: collapse;
-            padding: 4px;
-        }
-    </style>
-    <style type="text/css">
-        .red {
-            color: red;
-        }
-
-        .green {
-            color: green;
-        }
-    </style>
+    <link rel="stylesheet" href="meallist.css" type="text/css">
 </head>
 <body>
 <h3><a href="index.html">Home</a></h3>
@@ -36,13 +22,13 @@
     </tr>
 
     <c:forEach var="meal" items="${mealToList}">
-        <c:set var="color" scope="session" value="${meal.excess?'red':'green'}"/>
+        <c:set var="color" value="${meal.excess?'red':'green'}"/>
         <tr class=${color}>
-            <td><c:out value="${MealsUtil.getFormattedDateTime(meal.dateTime)}"/></td>
-            <td><c:out value="${meal.description}"/></td>
-            <td><c:out value="${meal.calories}"/></td>
-            <td><a href="meals?action=edit&Id=<c:out value="${meal.id}"/>">Update</a></td>
-            <td><a href="meals?action=delete&Id=<c:out value="${meal.id}"/>">Delete</a></td>
+            <td>${TimeUtil.getFormattedDateTime(meal.dateTime)}</td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
+            <td><a href="meals?action=edit&id=${meal.id}">Update</a></td>
+            <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
         </tr>
     </c:forEach>
 </table>
