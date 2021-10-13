@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--@elvariable id="editaction" type=""--%>
-<c:set var="editActionName" scope="session" value="${editaction=='edit'?'Edit meal':'Add meal'}"/>
+<c:set var="editActionName" scope="session" value="${meal.id!=null?'Edit meal':'Add meal'}"/>
 <html>
 <head>
     <link rel="stylesheet" href="mealedit.css" type="text/css">

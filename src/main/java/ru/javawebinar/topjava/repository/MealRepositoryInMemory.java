@@ -4,6 +4,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MealRepositoryInMemory implements Repository<Meal, Integer> {
     private final AtomicInteger idCounter;
 
-    private final ConcurrentHashMap<Integer, Meal> meals = new ConcurrentHashMap<>();
+    private final Map<Integer, Meal> meals = new ConcurrentHashMap<>();
 
     public MealRepositoryInMemory() {
         for (Meal meal : MealsUtil.meals) {
@@ -23,15 +24,7 @@ public class MealRepositoryInMemory implements Repository<Meal, Integer> {
     }
 
     public Meal deleteById(Integer id) {
-        if (id == null) {
-            return null;
-        } else {
-            Meal meal = this.meals.get(id);
-            if (meal != null) {
-                this.meals.remove(id);
-            }
-            return meal;
-        }
+        return this.meals.remove(id);
     }
 
     public Meal save(Meal entity) {

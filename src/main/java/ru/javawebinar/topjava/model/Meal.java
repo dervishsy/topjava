@@ -13,13 +13,6 @@ public class Meal {
 
     private final int calories;
 
-    public Meal() {
-        this.id = null;
-        this.dateTime = LocalDateTime.now();
-        this.description = "";
-        this.calories = 0;
-    }
-
     public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
         this.id = id;
         this.dateTime = dateTime;
@@ -52,6 +45,11 @@ public class Meal {
     }
 
     public String toString() {
-        return "Meal{id=" + this.id + ", dateTime=" + this.dateTime + ", description='" + this.description + '\'' + ", calories=" + this.calories + '}';
+        return "Meal{id=" + this.id
+                + ", dateTime=" + this.dateTime
+                + ", description='" + this.description
+                + "\'"
+                + ", calories=" + this.calories
+                + "}";
     }
 }
