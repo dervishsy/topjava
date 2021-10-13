@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 public class MealServlet extends HttpServlet {
@@ -22,8 +23,7 @@ public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private Repository<Meal, Integer> dao;
 
-    public void init() throws ServletException {
-        super.init();
+    public void init() {
         this.dao = new MealRepositoryInMemory();
     }
 
@@ -49,63 +49,25 @@ public class MealServlet extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        Integer id = this.getId(request);
-        String description = request.getParameter("description");
-
-        LocalDateTime dateTime;
-        try {
-            dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
-        } catch (Exception var9) {
-            log.debug("Error!!Edit meal. Date error {}", request.getParameter("dateTime"));
-            request.setAttribute("mealToList", MealsUtil.getMealsTo(this.dao.findAll()));
-            this.forward(request, response, LIST);
-            return;
-        }
-
-        int calories;
-        try {
-            calories = Integer.parseInt(request.getParameter("calories"));
-        } catch (NumberFormatException var8) {
-            log.debug("Error!!Edit meal.Calories error {}", request.getParameter("calories"));
-            request.setAttribute("mealToList", MealsUtil.getMealsTo(this.dao.findAll()));
-            this.forward(request, response, LIST);
-            return;
-        }
-
-        Meal meal = new Meal(id, dateTime, description, calories);
-        this.dao.save(meal);
-        if (id == null) {
-            log.debug("save new meal={}", meal);
-        } else {
-            log.debug("save edited meal={}", meal);
-        }
-
-        request.setAttribute("mealToList", MealsUtil.getMealsTo(this.dao.findAll()));
-        this.forward(request, response, LIST);
-    }
-
     private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("redirect to meals list");
-        request.setAttribute("mealToList", MealsUtil.getMealsTo(this.dao.findAll()));
+        log.debug("forward to meals list");
+        request.setAttribute("mealToList", MealsUtil.getMealsTo(this.dao.findAll(), MealsUtil.CALORIES_PER_DAY));
         this.forward(request, response, LIST);
     }
 
     private void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("redirect to add meal");
-        request.setAttribute("meal", new Meal());
-        request.setAttribute("editaction", "insert");
+        log.debug("forward to add meal");
+        LocalDateTime localDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        Meal meal = new Meal(null, localDateTime, "", 0);
+        request.setAttribute("meal", meal);
         this.forward(request, response, INSERT_OR_EDIT);
     }
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Meal meal = dao.findById(this.getId(request));
         if (meal != null) {
-            log.debug("redirect to edit meal={}", meal);
+            log.debug("forward to edit meal={}", meal);
             request.setAttribute("meal", meal);
-            request.setAttribute("editaction", "edit");
             this.forward(request, response, INSERT_OR_EDIT);
         } else {
             this.add(request, response);
@@ -115,7 +77,6 @@ public class MealServlet extends HttpServlet {
     private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Meal meal = dao.deleteById(this.getId(request));
         log.debug("redirect to delete meal = {}", meal);
-        request.setAttribute("mealToList", MealsUtil.getMealsTo(this.dao.findAll()));
         response.sendRedirect("meals");
     }
 
@@ -126,6 +87,29 @@ public class MealServlet extends HttpServlet {
 
     private Integer getId(HttpServletRequest request) {
         String idString = request.getParameter("id");
-        return idString != null && !idString.isEmpty() ? Integer.parseInt(request.getParameter("id")) : null;
+        if (idString == null || idString.isEmpty()) {
+            return null;
+        }
+        return Integer.parseInt(idString);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        Integer id = this.getId(request);
+        String description = request.getParameter("description");
+        LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
+        int calories = Integer.parseInt(request.getParameter("calories"));
+
+        Meal meal = new Meal(id, dateTime, description, calories);
+        if (id == null) {
+            log.debug("save new meal={}", meal);
+        } else {
+            log.debug("save edited meal={}", meal);
+        }
+        this.dao.save(meal);
+
+        request.setAttribute("mealToList", MealsUtil.getMealsTo(this.dao.findAll(), MealsUtil.CALORIES_PER_DAY));
+        this.forward(request, response, LIST);
     }
 }

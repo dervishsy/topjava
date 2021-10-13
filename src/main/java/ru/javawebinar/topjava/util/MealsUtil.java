@@ -14,11 +14,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MealsUtil {
-    private static final int CALORIES_PER_DAY = 2000;
+    public static final int CALORIES_PER_DAY = 2000;
     public static List<Meal> meals;
 
     static {
-
         MealsUtil.meals = Arrays.asList(
                 new Meal(1, LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
                 new Meal(2, LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
@@ -30,8 +29,8 @@ public class MealsUtil {
         );
     }
 
-    public static Collection<MealTo> getMealsTo(Collection<Meal> meals) {
-        return filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 59, 59, 999999999), CALORIES_PER_DAY);
+    public static Collection<MealTo> getMealsTo(Collection<Meal> meals, int caloriesPerDay) {
+        return filteredByStreams(meals, LocalTime.MIN, LocalTime.MAX, caloriesPerDay);
     }
 
     public static void main(String[] args) {

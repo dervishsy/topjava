@@ -22,8 +22,7 @@
     </tr>
 
     <c:forEach var="meal" items="${mealToList}">
-        <c:set var="color" value="${meal.excess?'red':'green'}"/>
-        <tr class=${color}>
+        <tr class=${meal.excess?'red':'green'}>
             <td>${TimeUtil.getFormattedDateTime(meal.dateTime)}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
