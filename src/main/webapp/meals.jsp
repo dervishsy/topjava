@@ -21,6 +21,17 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
+    <form method="get" action="meals">
+        <input type="hidden" name="action" value="filter">
+        BeginDate:<input type="date" name="beginDate" required>
+        EndDate:<input type="date" name="endDate" required>
+        <dl></dl>
+        BeginTime:<input type="time" name="beginTime" required>
+        EndTime:<input type="time" name="endTime" required>
+        <dl></dl>
+
+        <button type="submit">Filter</button>
+    </form>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">

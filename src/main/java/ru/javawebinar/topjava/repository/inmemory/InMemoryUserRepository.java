@@ -22,9 +22,8 @@ public class InMemoryUserRepository implements UserRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        //TODO Move to UserUtil
-        save(new User(null,"User 1","user1@user.user","password", Role.USER));
-        save(new User(null,"User 2","user2@user.user","password", Role.USER));
+        save(new User(null, "Admin", "admin@admin.admin", "password", Role.ADMIN));
+        save(new User(null, "User", "user@user.user", "password", Role.USER));
     }
 
     @Override
@@ -55,7 +54,7 @@ public class InMemoryUserRepository implements UserRepository {
     public List<User> getAll() {
         log.info("getAll");
         return repository.values().stream()
-                .sorted(Comparator.comparing(User::getEmail))
+                .sorted(Comparator.comparing(User::getName))
                 .collect(Collectors.toList());
     }
 

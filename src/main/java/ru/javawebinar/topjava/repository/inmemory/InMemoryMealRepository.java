@@ -1,11 +1,10 @@
 package ru.javawebinar.topjava.repository.inmemory;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.SecurityUtil;
+import ru.javawebinar.topjava.util.SecurityUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,8 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(m -> this.save(m, SecurityUtil.authUserId()));
+        MealsUtil.meals.forEach(m -> this.save(m, SecurityUtil.USER));
+        MealsUtil.mealsAdmin.forEach(m -> this.save(m, SecurityUtil.ADMIN));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class InMemoryMealRepository implements MealRepository {
         Map<Integer, Meal> userMeals = repository.get(userId);
         if (userMeals == null) {
             userMeals = new ConcurrentHashMap<>();
-            repository.put(SecurityUtil.authUserId(), userMeals);
+            repository.put(userId, userMeals);
         }
         return userMeals;
     }
