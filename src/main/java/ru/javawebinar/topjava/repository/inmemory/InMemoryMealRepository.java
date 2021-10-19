@@ -4,17 +4,16 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.util.SecurityUtil;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
-    //    private final Map<Integer, Meal> repository = new ConcurrentHashMap<>();
     private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
@@ -24,41 +23,47 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public Meal save(Meal meal, Integer userId) {
+    public Meal save(Meal meal, int userId) {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            getUserMeals(userId).put(meal.getId(), meal);
+            getUserMealsForChange(userId).put(meal.getId(), meal);
             return meal;
         }
         // handle case: update, but not present in storage
-        return getUserMeals(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        return getUserMealsForChange(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+    }
+
+    private Map<Integer, Meal> getUserMealsForChange(int userId) {
+        return repository.computeIfAbsent(userId,ConcurrentHashMap::new);
     }
 
     @Override
-    public boolean delete(int id, Integer userId) {
-        return getUserMeals(userId).remove(id) != null;
+    public boolean delete(int id, int userId) {
+        return getUserMealsForChange(userId).remove(id) != null;
     }
 
     @Override
-    public Meal get(int id, Integer userId) {
+    public Meal get(int id, int userId) {
         return getUserMeals(userId).get(id);
     }
 
+    private Map<Integer, Meal> getUserMeals(int userId) {
+        return repository.getOrDefault(userId,new HashMap<>());
+    }
+
     @Override
-    public List<Meal> getAll(Integer userId) {
+    public List<Meal> getAll(int userId) {
         return getUserMeals(userId).values().stream()
-                .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
+                .sorted(Comparator.comparing(Meal::getDateTime, Collections.reverseOrder()))
                 .collect(Collectors.toList());
     }
 
-    private Map<Integer, Meal> getUserMeals(Integer userId) {
-        Map<Integer, Meal> userMeals = repository.get(userId);
-        if (userMeals == null) {
-            userMeals = new ConcurrentHashMap<>();
-            repository.put(userId, userMeals);
-        }
-        return userMeals;
+    @Override
+    public List<Meal> getFiltred(int userId, Predicate<Meal> filter) {
+        return getUserMeals(userId).values().stream()
+                .filter(filter)
+                .sorted(Comparator.comparing(Meal::getDateTime, Collections.reverseOrder()))
+                .collect(Collectors.toList());
     }
-
 }
 

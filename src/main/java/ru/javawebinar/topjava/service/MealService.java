@@ -6,6 +6,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
@@ -19,24 +20,27 @@ public class MealService {
         this.repository = repository;
     }
 
-    public Meal create(Meal meal, Integer userId) {
+    public Meal create(Meal meal, int userId) {
         return repository.save(meal, userId);
     }
 
-    public void delete(int id, Integer userId) {
+    public void delete(int id, int userId) {
         checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
-    public Meal get(int id, Integer userId) {
+    public Meal get(int id, int userId) {
         return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
-    public List<Meal> getAll(Integer userId) {
+    public List<Meal> getAll(int userId) {
         return repository.getAll(userId);
     }
 
-    public void update(Meal meal, Integer userId) {
-        checkNotFoundWithId(repository.save(meal, userId), meal.getId());
+    public List<Meal> getFiltred(int userId,Predicate<Meal> filter) {
+        return repository.getFiltred(userId, filter);
     }
 
+    public void update(Meal meal, int userId) {
+        checkNotFoundWithId(repository.save(meal, userId), meal.getId());
+    }
 }

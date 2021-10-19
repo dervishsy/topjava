@@ -23,11 +23,11 @@
     <h2>Meals</h2>
     <form method="get" action="meals">
         <input type="hidden" name="action" value="filter">
-        BeginDate:<input type="date" name="beginDate" required>
-        EndDate:<input type="date" name="endDate" required>
+        BeginDate:<input type="date" name="beginDate">
+        EndDate:<input type="date" name="endDate">
         <dl></dl>
-        BeginTime:<input type="time" name="beginTime" required>
-        EndTime:<input type="time" name="endTime" required>
+        BeginTime:<input type="time" name="beginTime">
+        EndTime:<input type="time" name="endTime">
         <dl></dl>
 
         <button type="submit">Filter</button>

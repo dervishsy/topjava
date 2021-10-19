@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,7 +24,10 @@ public class InMemoryUserRepository implements UserRepository {
 
     {
         save(new User(null, "Admin", "admin@admin.admin", "password", Role.ADMIN));
-        save(new User(null, "User", "user@user.user", "password", Role.USER));
+        save(new User(null, "User", "user1@user.user", "password", Role.USER));
+        save(new User(null, "User", "User4@user.user", "password", Role.USER));
+        save(new User(null, "User", "uSer3@user.user", "password", Role.USER));
+        save(new User(null, "User", "useR2@user.user", "password", Role.USER));
     }
 
     @Override
@@ -54,7 +58,8 @@ public class InMemoryUserRepository implements UserRepository {
     public List<User> getAll() {
         log.info("getAll");
         return repository.values().stream()
-                .sorted(Comparator.comparing(User::getName))
+                .sorted(Comparator.comparing((User u)->u.getName().toLowerCase(Locale.ROOT))
+                        .thenComparing((User u)->u.getEmail().toLowerCase(Locale.ROOT)))
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +67,7 @@ public class InMemoryUserRepository implements UserRepository {
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
         return repository.values().stream()
-                .filter(x -> x.getEmail().equals(email))
+                .filter(user -> user.getEmail().equalsIgnoreCase(email))
                 .findFirst().orElse(null);
     }
 }

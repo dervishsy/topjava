@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.repository.inmemory.InMemoryUserRepository;
-import ru.javawebinar.topjava.util.SecurityUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +34,6 @@ public class UserServlet extends HttpServlet {
         String id = request.getParameter("user");
         SecurityUtil.setUserId(Integer.parseInt(id));
         log.info("Select user id {}", id);
-        response.sendRedirect("index.html");
+        response.sendRedirect("meals");
     }
-
 }
