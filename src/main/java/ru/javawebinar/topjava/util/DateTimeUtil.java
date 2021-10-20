@@ -7,38 +7,32 @@ import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
     enum HalfOpen {
-        NO_HALFOPEN,
-        LEFT_HALFOPEN,
-        RIGHT_HALFOPEN,
-        BOTH_HALFOPEN
+        CLOSED,
+        LEFT_HALF_OPEN,
+        RIGHT_HALF_OPEN,
+        OPEN
     }
+
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public static boolean isBetweenDatesAndTime(LocalDateTime ldt
-            , LocalDate beginDate, LocalDate endDate
-            , LocalTime startTime, LocalTime endTime) {
-        return isBetween(ldt.toLocalDate(), beginDate, endDate,HalfOpen.NO_HALFOPEN)
-                && isBetween(ldt.toLocalTime(), startTime, endTime,HalfOpen.RIGHT_HALFOPEN);
-    }
-
-    private static <T extends Comparable<? super T>>boolean isBetween(T value, T start, T end, HalfOpen halfopen) {
+    public static <T extends Comparable<T>> boolean isBetween(T value, T start, T end, HalfOpen halfopen) {
         boolean result = true;
-        if ((start != null)&&((halfopen==HalfOpen.NO_HALFOPEN)||(halfopen==HalfOpen.RIGHT_HALFOPEN))) {
+        if ((start != null) && ((halfopen == HalfOpen.CLOSED) || (halfopen == HalfOpen.RIGHT_HALF_OPEN))) {
             result = result && (value.compareTo(start) >= 0);
         }
-        if ((end != null)&&((halfopen==HalfOpen.NO_HALFOPEN)||(halfopen==HalfOpen.LEFT_HALFOPEN))) {
+        if ((end != null) && ((halfopen == HalfOpen.CLOSED) || (halfopen == HalfOpen.LEFT_HALF_OPEN))) {
             result = result && (value.compareTo(end) <= 0);
         }
-        if ((start != null)&&((halfopen==HalfOpen.LEFT_HALFOPEN)||(halfopen==HalfOpen.BOTH_HALFOPEN))) {
+        if ((start != null) && ((halfopen == HalfOpen.LEFT_HALF_OPEN) || (halfopen == HalfOpen.OPEN))) {
             result = result && (value.compareTo(start) > 0);
         }
-        if ((end != null)&&((halfopen==HalfOpen.RIGHT_HALFOPEN)||(halfopen==HalfOpen.BOTH_HALFOPEN))) {
+        if ((end != null) && ((halfopen == HalfOpen.RIGHT_HALF_OPEN) || (halfopen == HalfOpen.OPEN))) {
             result = result && (value.compareTo(end) < 0);
         }
         return result;
     }
 
-    private static boolean isBetweenDates(LocalDate ld, LocalDate start, LocalDate end) {
+    public static boolean isBetweenDates(LocalDate ld, LocalDate start, LocalDate end) {
         boolean result = true;
         if (start != null) result = result && (ld.compareTo(start) >= 0);
         if (end != null) result = result && (ld.compareTo(end) <= 0);
@@ -60,14 +54,16 @@ public class DateTimeUtil {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
     }
 
-    public static LocalDate parseDate(String dateOrTime) {
-        if (dateOrTime.isEmpty()) return null;
-        return LocalDate.parse(dateOrTime);
+    public static LocalDate parseDate(String date) {
+        if (date == null) return null;
+        if (date.isEmpty()) return null;
+        return LocalDate.parse(date);
     }
 
-    public static LocalTime parseTime(String dateOrTime) {
-        if (dateOrTime.isEmpty()) return null;
-        return LocalTime.parse(dateOrTime);
+    public static LocalTime parseTime(String time) {
+        if (time == null) return null;
+        if (time.isEmpty()) return null;
+        return LocalTime.parse(time);
     }
 }
 

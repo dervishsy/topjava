@@ -18,5 +18,5 @@ public interface MealRepository {
     // ORDERED dateTime desc
     List<Meal> getAll(int userId);
 
-    List<Meal> getFiltred(int userId, Predicate<Meal> filter);
+    List<Meal> getFiltered(int userId, Predicate<Meal> filter);
 }

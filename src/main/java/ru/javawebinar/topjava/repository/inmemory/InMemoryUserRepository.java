@@ -58,8 +58,8 @@ public class InMemoryUserRepository implements UserRepository {
     public List<User> getAll() {
         log.info("getAll");
         return repository.values().stream()
-                .sorted(Comparator.comparing((User u)->u.getName().toLowerCase(Locale.ROOT))
-                        .thenComparing((User u)->u.getEmail().toLowerCase(Locale.ROOT)))
+                .sorted(Comparator.comparing(User::getName,String.CASE_INSENSITIVE_ORDER)
+                        .thenComparing(User::getEmail,String.CASE_INSENSITIVE_ORDER))
                 .collect(Collectors.toList());
     }
 

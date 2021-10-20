@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
@@ -24,7 +25,7 @@ public class MealServlet extends HttpServlet {
 
     private MealRestController restController;
 
-    private static ConfigurableApplicationContext appCtx;
+    private ConfigurableApplicationContext appCtx;
 
     @Override
     public void init() {
@@ -66,10 +67,13 @@ public class MealServlet extends HttpServlet {
                 log.info("filter");
                 LocalDate beginDate = DateTimeUtil.parseDate(request.getParameter("beginDate"));
                 LocalDate endDate = DateTimeUtil.parseDate(request.getParameter("endDate"));
-                LocalTime startTime = DateTimeUtil.parseTime(request.getParameter("beginTime"));
+                LocalTime beginTime = DateTimeUtil.parseTime(request.getParameter("beginTime"));
                 LocalTime endTime = DateTimeUtil.parseTime(request.getParameter("endTime"));
 
-                request.setAttribute("meals", restController.filter(beginDate, endDate, startTime, endTime));
+                request.setAttribute("meals", restController.filter(beginDate, endDate, beginTime, endTime));
+                 for (String param : Arrays.asList("beginDate","endDate","beginTime","endTime")) {
+                     request.setAttribute(param, request.getParameter(param));
+                 }
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
             case "delete":

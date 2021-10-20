@@ -65,8 +65,8 @@ public class MealRestController {
         int userId = SecurityUtil.authUserId();
         log.info("filter for userId {} ,beginDate {},  endDate {},  startTime {},  endTime {}"
                 , userId, beginDate, endDate, startTime, endTime);
-        return MealsUtil.getTos(service.getFiltred(userId,
-                meal -> DateTimeUtil.isBetweenDatesAndTime(meal.getDateTime(),beginDate, endDate, startTime, endTime)),
-                SecurityUtil.authUserCaloriesPerDay());
+        return MealsUtil.getFilteredTos(
+                service.getFiltered(userId, meal -> DateTimeUtil.isBetweenDates(meal.getDate(), beginDate, endDate)),
+                MealsUtil.DEFAULT_CALORIES_PER_DAY, startTime, endTime);
     }
 }

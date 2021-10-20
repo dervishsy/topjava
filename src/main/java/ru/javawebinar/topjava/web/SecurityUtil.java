@@ -3,11 +3,9 @@ package ru.javawebinar.topjava.web;
 import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
 public class SecurityUtil {
-    public static final int ADMIN = 1;
+    public static final int ADMIN_ID = 1;
 
-    public static final int USER = 2;
-
-    public static final int USER_WITH_NO_MEALS = 3;
+    public static final int USER_ID = 2;
 
     private static int userId = 1;
 

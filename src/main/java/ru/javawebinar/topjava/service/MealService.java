@@ -36,8 +36,8 @@ public class MealService {
         return repository.getAll(userId);
     }
 
-    public List<Meal> getFiltred(int userId,Predicate<Meal> filter) {
-        return repository.getFiltred(userId, filter);
+    public List<Meal> getFiltered(int userId, Predicate<Meal> filter) {
+        return repository.getFiltered(userId, filter);
     }
 
     public void update(Meal meal, int userId) {

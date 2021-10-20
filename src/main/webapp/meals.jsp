@@ -1,3 +1,8 @@
+<%--@elvariable id="meals" type="java.util.List"--%>
+<%--@elvariable id="beginDate" type=""--%>
+<%--@elvariable id="endDate" type=""--%>
+<%--@elvariable id="beginTime" type=""--%>
+<%--@elvariable id="endTime" type=""--%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -23,11 +28,19 @@
     <h2>Meals</h2>
     <form method="get" action="meals">
         <input type="hidden" name="action" value="filter">
-        BeginDate:<input type="date" name="beginDate">
-        EndDate:<input type="date" name="endDate">
+        <label>
+            BeginDate:<input type="date" name="beginDate" value="${beginDate}">
+        </label>
+        <label>
+            EndDate:<input type="date" name="endDate" value="${endDate}">
+        </label>
         <dl></dl>
-        BeginTime:<input type="time" name="beginTime">
-        EndTime:<input type="time" name="endTime">
+        <label>
+            BeginTime:<input type="time" name="beginTime" value="${beginTime}">
+        </label>
+        <label>
+            EndTime:<input type="time" name="endTime" value="${endTime}">
+        </label>
         <dl></dl>
 
         <button type="submit">Filter</button>
