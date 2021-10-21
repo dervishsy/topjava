@@ -103,7 +103,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
+            <version>5.3.9</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
