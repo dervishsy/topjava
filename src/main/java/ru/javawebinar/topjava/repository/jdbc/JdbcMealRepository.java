@@ -37,21 +37,21 @@ public class JdbcMealRepository implements MealRepository {
     @Override
     public Meal save(Meal meal, int userId) {
         MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("id",meal.getId())
-                .addValue("user_id",userId)
-                .addValue("dateTime",meal.getDateTime())
-                .addValue("description",meal.getDescription())
-                .addValue("calories",meal.getCalories());
+                .addValue("id", meal.getId())
+                .addValue("user_id", userId)
+                .addValue("dateTime", meal.getDateTime())
+                .addValue("description", meal.getDescription())
+                .addValue("calories", meal.getCalories());
 
-        if (meal.isNew()){
+        if (meal.isNew()) {
             Number newKey = insertMeal.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
             return meal;
-        }else{
+        } else {
             int update = namedParameterJdbcTemplate.update(
                     "UPDATE meals SET dateTime=:dateTime, description=:description, " +
                             "calories=:calories WHERE  user_id=:user_id and id=:id", map);
-            if (update ==0) {
+            if (update == 0) {
                 return null;
             }
         }
@@ -60,12 +60,12 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return jdbcTemplate.update("DELETE FROM meals WHERE user_id=? and id=?",userId, id) != 0;
+        return jdbcTemplate.update("DELETE FROM meals WHERE user_id=? and id=?", userId, id) != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        List<Meal> meals = jdbcTemplate.query("SELECT * FROM meals WHERE  user_id=? AND id=?", MEAL_ROW_MAPPER, userId,id);
+        List<Meal> meals = jdbcTemplate.query("SELECT * FROM meals WHERE  user_id=? AND id=?", MEAL_ROW_MAPPER, userId, id);
         return DataAccessUtils.singleResult(meals);
     }
 
