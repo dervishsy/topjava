@@ -16,7 +16,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
-import static ru.javawebinar.topjava.MealTestData.MEAL_ID;
+import static ru.javawebinar.topjava.MealTestData.USER_MEAL_ID;
 import static ru.javawebinar.topjava.MealTestData.assertMatch;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
@@ -40,24 +40,24 @@ public class MealServiceTest {
 
     @Test
     public void get() {
-        Meal meal = service.get(MEAL_ID, USER_ID);
+        Meal meal = service.get(USER_MEAL_ID, USER_ID);
         assertMatch(meal, MealTestData.meal);
     }
 
     @Test
     public void getOtherMeal() {
-        assertThrows(NotFoundException.class, () -> service.get(MEAL_ID, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.get(USER_MEAL_ID, ADMIN_ID));
     }
 
     @Test(expected = NotFoundException.class)
     public void deleteOtherMeal() {
-        service.delete(MEAL_ID, ADMIN_ID);
+        service.delete(USER_MEAL_ID, ADMIN_ID);
     }
 
     @Test
     public void delete() {
-        service.delete(MEAL_ID, USER_ID);
-        assertThrows(NotFoundException.class, () -> service.get(MEAL_ID, USER_ID));
+        service.delete(USER_MEAL_ID, USER_ID);
+        assertThrows(NotFoundException.class, () -> service.get(USER_MEAL_ID, USER_ID));
     }
 
 
@@ -71,7 +71,7 @@ public class MealServiceTest {
     public void update() {
         Meal updated = MealTestData.getUpdated();
         service.update(updated, USER_ID);
-        assertMatch(service.get(MEAL_ID, USER_ID), MealTestData.getUpdated());
+        assertMatch(service.get(USER_MEAL_ID, USER_ID), MealTestData.getUpdated());
     }
 
     @Test
