@@ -1,7 +1,11 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,6 +17,8 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -21,11 +27,13 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
+        "classpath:spring/spring-db.xml",
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
+    public static List<String> testList = new ArrayList<>();
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private MealService service;
@@ -61,7 +69,6 @@ public class MealServiceTest {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
     }
-
 
     @Test
     public void get() {
@@ -108,5 +115,39 @@ public class MealServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
+    }
+
+    @Rule
+    public final Stopwatch stopwatch = new Stopwatch() {
+
+        protected void succeeded(long nanos, Description description) {
+            saveTestResult(nanos," succeeded, time = ", description);
+        }
+
+        /**
+         * Invoked when a test fails
+         */
+        protected void failed(long nanos, Throwable e, Description description) {
+            saveTestResult(nanos," failed, time = ", description);
+        }
+
+        /**
+         * Invoked when a test is skipped due to a failed assumption.
+         */
+        protected void skipped(long nanos, AssumptionViolatedException e,
+                               Description description) {
+            saveTestResult(nanos," skipped, time = ", description);
+        }
+
+        private void saveTestResult(long nanos,String additionalInfo, Description description) {
+            String outString = description.getMethodName() + additionalInfo + nanos+" ns";
+            log.info(outString);
+            testList.add(outString);
+        }
+    };
+
+    @AfterClass
+    public static void afterClass()  {
+        testList.forEach(System.out::println);
     }
 }
