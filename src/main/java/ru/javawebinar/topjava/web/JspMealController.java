@@ -26,7 +26,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 @Controller
-@RequestMapping(value = "/meals")
+@RequestMapping("meals")
 public class JspMealController {
 
     @Autowired
@@ -60,7 +60,7 @@ public class JspMealController {
         int userId = SecurityUtil.authUserId();
         int id = getId(request);
         service.delete(id, userId);
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
     @GetMapping("/update")
@@ -80,7 +80,7 @@ public class JspMealController {
         return "mealForm";
     }
 
-    @PostMapping("/meals")
+    @PostMapping()
     protected String doCreateUpdate(HttpServletRequest request) throws IOException {
 
         request.setCharacterEncoding("UTF-8");
@@ -97,7 +97,7 @@ public class JspMealController {
             checkNew(meal);
             service.create(meal, userId);
         }
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
     private int getId(HttpServletRequest request) {
