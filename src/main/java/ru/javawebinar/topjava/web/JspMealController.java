@@ -39,7 +39,7 @@ public class JspMealController {
         return "meals";
     }
 
-    @GetMapping("/filter")
+    @GetMapping("filter")
     public String filter(Model model, HttpServletRequest request) {
         int userId = SecurityUtil.authUserId();
 
@@ -48,14 +48,13 @@ public class JspMealController {
         LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
         LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
 
-
         List<Meal> mealsDateFiltered = service.getBetweenInclusive(startDate, endDate, userId);
 
         model.addAttribute("meals", MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime));
         return "meals";
     }
 
-    @GetMapping("/delete")
+    @GetMapping("delete")
     public String delete(Model model, HttpServletRequest request) {
         int userId = SecurityUtil.authUserId();
         int id = getId(request);
@@ -63,7 +62,7 @@ public class JspMealController {
         return "redirect:/meals";
     }
 
-    @GetMapping("/update")
+    @GetMapping("update")
     public String update(Model model, HttpServletRequest request) {
         int userId = SecurityUtil.authUserId();
         int id = getId(request);
@@ -72,7 +71,7 @@ public class JspMealController {
         return "mealForm";
     }
 
-    @GetMapping("/create")
+    @GetMapping("create")
     public String create(Model model, HttpServletRequest request) {
         Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
 
@@ -97,7 +96,7 @@ public class JspMealController {
             checkNew(meal);
             service.create(meal, userId);
         }
-        return "redirect:/meals";
+        return "redirect:meals";
     }
 
     private int getId(HttpServletRequest request) {
