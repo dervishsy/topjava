@@ -32,8 +32,8 @@ public class JspMealController {
     @Autowired
     private MealService service;
 
-    @GetMapping()
-    public String getMeals(Model model, HttpServletRequest request) {
+    @GetMapping
+    public String getAll(Model model) {
         int userId = SecurityUtil.authUserId();
         model.addAttribute("meals", MealsUtil.getTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay()));
         return "meals";
@@ -55,7 +55,7 @@ public class JspMealController {
     }
 
     @GetMapping("delete")
-    public String delete(Model model, HttpServletRequest request) {
+    public String delete(HttpServletRequest request) {
         int userId = SecurityUtil.authUserId();
         int id = getId(request);
         service.delete(id, userId);
@@ -72,7 +72,7 @@ public class JspMealController {
     }
 
     @GetMapping("create")
-    public String create(Model model, HttpServletRequest request) {
+    public String create(Model model) {
         Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
 
         model.addAttribute("meal", meal);
@@ -81,8 +81,6 @@ public class JspMealController {
 
     @PostMapping()
     protected String doCreateUpdate(HttpServletRequest request) throws IOException {
-
-        request.setCharacterEncoding("UTF-8");
         Meal meal = new Meal(
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),

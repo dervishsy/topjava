@@ -1,15 +1,12 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.Test;
-import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Date;
 import java.util.Set;
-
-import static ru.javawebinar.topjava.Profiles.DATAJPA;
 
 public abstract class AbstractDataJpaUserServiceTest extends AbstractUserServiceTest {
 
