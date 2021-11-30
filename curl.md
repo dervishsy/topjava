@@ -13,7 +13,7 @@ curl -v -X POST -H "Content-Type: application/json; charset=UTF-8" --data-binary
 ### content of create_data.txt
 #### {"dateTime":"2020-02-01T18:00:00","description":"Созданный ужин","calories":300}
 
-#Update meal
+# Update meal
 curl -v -X PUT -H "Content-Type: application/json; charset=UTF-8" -d {"id":100002,"dateTime":"2020-01-30T10:02:00","description":"Обновленный завтрак","calories":500} http://localhost:8000/topjava/rest/meals/100002
 ## or
 curl -v -X PUT -H "Content-Type: application/json; charset=UTF-8" --data-binary "@update_data.txt" http://localhost:8000/topjava/rest/meals/100002
