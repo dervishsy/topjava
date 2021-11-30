@@ -9,7 +9,7 @@ import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-import ru.javawebinar.topjava.web.AbstractControllerTest;
+import ru.javawebinar.topjava.web.common.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -83,5 +83,16 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_MATCHER.contentJson(admin, user));
+    }
+
+    @Test
+    void getWithMeals() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL+"/with-meals/"+ADMIN_ID))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        User userWithMeals = USER_MATCHER.readFromJson(action);
+        USER_MATCHER.assertMatch(userService.get(ADMIN_ID), userWithMeals);
     }
 }
